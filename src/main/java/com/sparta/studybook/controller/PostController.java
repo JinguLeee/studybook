@@ -1,6 +1,7 @@
 package com.sparta.studybook.controller;
 
 import com.sparta.studybook.dto.request.PostRequestDto;
+import com.sparta.studybook.dto.response.LikeResponseDto;
 import com.sparta.studybook.dto.response.PostResponseDto;
 import com.sparta.studybook.dto.response.ResponseDto;
 import com.sparta.studybook.security.UserDetailsImpl;
@@ -50,6 +51,12 @@ public class PostController {
     public ResponseEntity<Object> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(id, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(HttpStatus.OK.value(), "게시글 삭제"));
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/post/{postId}")
+    public LikeResponseDto likePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.likepost(postId, userDetails.getUser());
     }
 
 }
