@@ -8,6 +8,7 @@ import com.sparta.studybook.jwt.JwtUtil;
 import com.sparta.studybook.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,16 +21,17 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public ResponseDto signup(SignupRequestDto signupRequestDto) {
+    public void signup(SignupRequestDto signupRequestDto) {
 
         // 아이디
         String userid = signupRequestDto.getUserid();
         // 사용자 이름
         String username = signupRequestDto.getUsername();
         // 비밀번호
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
         // 이메일
         String email = signupRequestDto.getEmail();
 
@@ -41,11 +43,10 @@ public class UserService {
         User user = new User(userid, password, username, email);
         userRepository.save(user);
 
-        return new ResponseDto(HttpStatus.OK.value(), "회원가입 성공");
     }
 
     @Transactional
-    public ResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String userid = loginRequestDto.getUserid();
         String password = loginRequestDto.getPassword();
 
@@ -53,12 +54,12 @@ public class UserService {
                 () -> new IllegalArgumentException("아이디가 없습니다.")
         );
 
-        if(!user.getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserid()));
 
-        return new ResponseDto(HttpStatus.OK.value(), "로그인 성공");
+
     }
 }

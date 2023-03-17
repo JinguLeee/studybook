@@ -2,8 +2,10 @@ package com.sparta.studybook.controller;
 
 import com.sparta.studybook.dto.request.LoginRequestDto;
 import com.sparta.studybook.dto.request.SignupRequestDto;
+import com.sparta.studybook.dto.response.ResponseDto;
 import com.sparta.studybook.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +23,15 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignupRequestDto signupRequestDto) {
-        return ResponseEntity.ok().body(userService.signup(signupRequestDto));
+    public ResponseDto signup(@RequestBody SignupRequestDto signupRequestDto) {
+        userService.signup(signupRequestDto);
+        return new ResponseDto( HttpStatus.OK.value(), "회원가입 성공!");
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        return ResponseEntity.ok().body(userService.login(loginRequestDto, response));
+    public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        userService.login(loginRequestDto, response);
+        return new ResponseDto( HttpStatus.OK.value(), "로그인 성공");
     }
 
 }
