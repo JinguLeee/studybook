@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostResponseDto {
+    // 클라에서 게시글 어떤 내용을 보여줄지
     private Long id;
     private String title;
     private String userid;
     private String content;
     private LocalDateTime createdAt;
 
+    // 게시글 response
     public PostResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
