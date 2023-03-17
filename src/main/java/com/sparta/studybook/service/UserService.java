@@ -26,21 +26,15 @@ public class UserService {
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
-        // 아이디
-        String userid = signupRequestDto.getUserid();
-        // 사용자 이름
-        String username = signupRequestDto.getUsername();
-        // 비밀번호
-        String password = passwordEncoder.encode(signupRequestDto.getPassword());
-        // 이메일
-        String email = signupRequestDto.getEmail();
-
-        Optional<User> found = userRepository.findByUserid(userid);
+        Optional<User> found = userRepository.findByUserid(signupRequestDto.getUserid());
         if (found.isPresent()) { // isPresent : ture는 실행, false는 실행불가
             throw new IllegalArgumentException("중복된 아이디 입니다.");
         }
 
-        User user = new User(userid, password, username, email);
+        // 비밀번호
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
+
+        User user = new User(signupRequestDto, password);
         userRepository.save(user);
 
     }
