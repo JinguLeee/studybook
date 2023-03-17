@@ -1,5 +1,6 @@
 package com.sparta.studybook.entity;
 
+import com.sparta.studybook.dto.request.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,5 +23,11 @@ public class Post extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+    public Post(PostRequestDto postRequestDto, User user) {
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.user = user;
+    }
 
 }
