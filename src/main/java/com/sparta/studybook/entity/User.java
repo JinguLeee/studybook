@@ -21,10 +21,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    public User(String userid, String username, String password, String email) {
+    public User(String userid, String password, String username, String email) {
         this.userid = userid;
-        this.username = username;
         this.password = password;
+        this.username = username;
         this.email = email;
     }
 }
