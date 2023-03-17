@@ -1,7 +1,9 @@
 package com.sparta.studybook.entity;
 
+import com.sparta.studybook.dto.request.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -25,10 +27,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    public User(String userid, String password, String username, String email) {
-        this.userid = userid;
+    public User(SignupRequestDto signupRequestDto, String password) {
+        this.userid = signupRequestDto.getUserid();
         this.password = password;
-        this.username = username;
-        this.email = email;
+        this.username = signupRequestDto.getUsername();
+        this.email = signupRequestDto.getEmail();
     }
 }
