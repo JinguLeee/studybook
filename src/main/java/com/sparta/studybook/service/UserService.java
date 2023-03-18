@@ -2,12 +2,10 @@ package com.sparta.studybook.service;
 
 import com.sparta.studybook.dto.request.LoginRequestDto;
 import com.sparta.studybook.dto.request.SignupRequestDto;
-import com.sparta.studybook.dto.response.ResponseDto;
 import com.sparta.studybook.entity.User;
 import com.sparta.studybook.jwt.JwtUtil;
 import com.sparta.studybook.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
