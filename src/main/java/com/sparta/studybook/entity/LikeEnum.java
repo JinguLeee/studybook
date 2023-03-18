@@ -3,13 +3,13 @@ package com.sparta.studybook.entity;
 public enum LikeEnum {
     POST(0);
 
-    private final int index;
+    private final int seq;
 
-    LikeEnum(int index) {
-        this.index = index;
+    LikeEnum(int seq) {
+        this.seq = seq;
     }
 
-    public int getIndex() {
-        return index;
+    public int getSeq() {
+        return seq;
     }
 }

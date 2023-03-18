@@ -2,6 +2,7 @@ package com.sparta.studybook.service;
 
 import com.sparta.studybook.dto.request.PostRequestDto;
 import com.sparta.studybook.dto.response.LikeResponseDto;
+import com.sparta.studybook.dto.response.PostDetailResponseDto;
 import com.sparta.studybook.dto.response.PostResponseDto;
 import com.sparta.studybook.entity.Like;
 import com.sparta.studybook.entity.LikeEnum;
@@ -30,28 +31,32 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
         // post객체 = 새로운 post객체에 postRequestDto을 담음
         Post post = postRepository.saveAndFlush(new Post(postRequestDto, user));
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, false);
     }
 
     // 전체 게시글 조회
     @Transactional
-    public List<PostResponseDto> getAllPost() {
+    public List<PostResponseDto> getAllPost(User user) {
         // 모든 게시글 작성일별 내림차순 리스트
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
         List<PostResponseDto> postList = new ArrayList<>();
         for (Post post : posts) {
-            postList.add(new PostResponseDto(post));
+            boolean isLike = false;
+            if (user != null) isLike = isLike(LikeEnum.POST.getSeq(), post.getId(), user);
+            postList.add(new PostResponseDto(post, isLike));
         }
         return postList;
     }
 
     // 게시글 상세 조회
     @Transactional
-    public PostResponseDto getPost(Long postId) {
+    public PostDetailResponseDto getPost(Long postId, User user) {
         // 게시글 유무
         Post post = checkPost(postId);
-        return new PostResponseDto(post);
+        boolean isLike = isLike(LikeEnum.POST.getSeq(), post.getId(), user);
+        Long countLike = countLike(LikeEnum.POST.getSeq(), post.getId());
+        return new PostDetailResponseDto(post, isLike, countLike);
     }
 
     // 게시글 수정
@@ -89,20 +94,26 @@ public class PostService {
         postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 없습니다.")
         );
-        Optional<Like> like = likeRepository.findByIndexAndLikeIdAndUser(LikeEnum.POST.getIndex(), postId, user);
+        Optional<Like> like = likeRepository.findBySeqAndLikeIdAndUser(LikeEnum.POST.getSeq(), postId, user);
         boolean isLike = like.isEmpty();
         if (isLike){
             // 좋아요
-            likeRepository.saveAndFlush(new Like(LikeEnum.POST.getIndex(), postId, postId, user));
+            likeRepository.saveAndFlush(new Like(LikeEnum.POST.getSeq(), postId, postId, user));
         } else {
             // 좋아요 취소
             likeRepository.deleteById(like.get().getId());
         }
-        Long likeCount = countLike(LikeEnum.POST.getIndex(), postId);
-        return new LikeResponseDto(isLike,likeCount);
+        Long likecount = countLike(LikeEnum.POST.getSeq(), postId);
+        return new LikeResponseDto(isLike, likecount);
     }
 
-    private Long countLike(int index, Long postId){
-        return likeRepository.countByIndexAndLikeId(index, postId);
+    private Long countLike(int seq, Long postId){
+        return likeRepository.countBySeqAndLikeId(seq, postId);
     }
+
+    public boolean isLike(int seq, Long likeId, User user) {
+        Optional<Like> like = likeRepository.findBySeqAndLikeIdAndUser(seq, likeId, user);
+        return like.isPresent();
+    }
+
 }
