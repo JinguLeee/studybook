@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,15 +24,15 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseDto signup(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
-        return new ResponseDto( HttpStatus.OK.value(), "회원가입 성공!");
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.CREATED.value(), "회원가입 완료."));
     }
 
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);
-        return new ResponseDto( HttpStatus.OK.value(), "로그인 성공");
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK.value(), "로그인 완료."));
     }
 
 }
