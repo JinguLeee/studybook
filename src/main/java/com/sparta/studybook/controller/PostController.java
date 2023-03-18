@@ -34,21 +34,21 @@ public class PostController {
     }
 
    // 게시글 상세 조회
-   @GetMapping("/post/{id}")
+   @GetMapping("/post/{postId}")
    public PostResponseDto getPost(@PathVariable Long id) {
         return postService.getPost(id);
    }
 
     // 게시글 수정
-    @PutMapping("/post/{id}")
-    public ResponseEntity<Object> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<ResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.updatePost(id, postRequestDto, userDetails.getUser());
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK.value(), "수정 완료."));
     }
 
     // 게시글 삭제
-    @DeleteMapping("/post/{id}")
-    public ResponseEntity<Object> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<ResponseDto> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(id, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(HttpStatus.OK.value(), "게시글 삭제"));
     }
