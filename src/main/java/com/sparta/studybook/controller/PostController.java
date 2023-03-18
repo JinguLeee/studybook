@@ -22,8 +22,10 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping("/post")
-    public ResponseEntity<ResponseDto<PostResponseDto>> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(new ResponseDto<>("작성 완료", HttpStatus.CREATED.value(), postService.createPost(postRequestDto, userDetails.getUser())));
+    public ResponseEntity<ResponseDto> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.createPost(postRequestDto, userDetails.getUser());
+        return ResponseEntity.ok().body(new ResponseDto<>("작성 완료", HttpStatus.CREATED.value(), null));
+
     }
 
     // 전체 게시글 조회

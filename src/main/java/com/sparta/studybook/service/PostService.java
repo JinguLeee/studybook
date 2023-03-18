@@ -28,10 +28,9 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
+    public void createPost(PostRequestDto postRequestDto, User user) {
         // post객체 = 새로운 post객체에 postRequestDto을 담음
-        Post post = postRepository.saveAndFlush(new Post(postRequestDto, user));
-        return new PostResponseDto(post, false);
+        postRepository.saveAndFlush(new Post(postRequestDto, user));
     }
 
     // 전체 게시글 조회
