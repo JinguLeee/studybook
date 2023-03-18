@@ -4,7 +4,7 @@ import com.sparta.studybook.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ public class PostResponseDto {
     private String title;
     private String userid;
     private String content;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     // 게시글 response
     public PostResponseDto(Post post) {
@@ -22,7 +22,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.userid = post.getUser().getUserid();
         this.content = post.getContent();
-        this.createdAt = post.getCreatedAt();
+        this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd a h:mm"));
     }
 
 }
