@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity(name = "likelist")
+@Entity(name = "likes")
 @Getter
 @NoArgsConstructor
 public class Like {
@@ -14,7 +14,7 @@ public class Like {
     private Long id;
 
     @Column(nullable = false)
-    private int index;
+    private int seq;
 
     @Column(nullable = false)
     private Long postId;
@@ -26,8 +26,8 @@ public class Like {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    public Like(int index, Long postId, Long likeId, User user) {
-        this.index = index;
+    public Like(int seq, Long postId, Long likeId, User user) {
+        this.seq = seq;
         this.postId = postId;
         this.likeId = likeId;
         this.user = user;
