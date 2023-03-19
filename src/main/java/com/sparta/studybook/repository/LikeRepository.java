@@ -1,13 +1,16 @@
 package com.sparta.studybook.repository;
 
 import com.sparta.studybook.entity.Like;
+import com.sparta.studybook.entity.Post;
 import com.sparta.studybook.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
-    Optional<Like> findBySeqAndLikeIdAndUser(int seq, Long likeId, User user);
+    Optional<Like> findByPostAndUser(Post post, User user);
 
-    Long countBySeqAndLikeId(int seq, Long likeId);
+    Long countByPost(Post post);
+
+    void deleteAllByPostId(Long postId);
 }

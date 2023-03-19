@@ -13,23 +13,16 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int seq;
-
-    @Column(nullable = false)
-    private Long postId;
-
-    @Column(nullable = false)
-    private Long likeId;
+    @ManyToOne
+    @JoinColumn(name = "postId", nullable = false)
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    public Like(int seq, Long postId, Long likeId, User user) {
-        this.seq = seq;
-        this.postId = postId;
-        this.likeId = likeId;
+    public Like(Post post, User user) {
+        this.post = post;
         this.user = user;
     }
 
