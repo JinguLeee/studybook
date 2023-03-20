@@ -8,7 +8,6 @@ import lombok.Setter;
 public class LoginRequestDto {
 
     private String loginid;
-
     private String password;
 
 }

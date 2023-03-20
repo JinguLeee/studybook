@@ -14,4 +14,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdAndUser(Long id, User user);
 
     void deleteAllByUser(User user);
+
 }

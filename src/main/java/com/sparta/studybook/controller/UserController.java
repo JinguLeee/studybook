@@ -40,6 +40,7 @@ public class UserController {
         return ResponseEntity.ok().body(new ResponseDto<>("회원가입 완료", HttpStatus.CREATED.value(), null));
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);
@@ -51,19 +52,6 @@ public class UserController {
     public ResponseEntity<ResponseDto> deleteId(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
         userService.deleteId(userDetails.getUser(), response);
         return ResponseEntity.ok().body(new ResponseDto<>("회원탈퇴 완료", HttpStatus.OK.value(), null));
-    }
-
-    // 토큰 에러
-    @GetMapping("/token-error")
-    public ResponseEntity<ResponseDto> tokenError() {
-        RestApiException restApiException = new RestApiException();
-        restApiException.setHttpStatus(HttpStatus.BAD_REQUEST);
-        restApiException.setErrorMessage("로그인이 필요합니다.");
-
-        return new ResponseEntity(
-                restApiException,
-                HttpStatus.BAD_REQUEST
-        );
     }
 
 }

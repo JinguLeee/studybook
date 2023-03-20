@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 public class Post extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,4 +39,5 @@ public class Post extends Timestamped {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
     }
+
 }

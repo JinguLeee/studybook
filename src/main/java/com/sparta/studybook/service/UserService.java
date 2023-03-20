@@ -25,6 +25,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
@@ -41,6 +42,7 @@ public class UserService {
 
     }
 
+    // 로그인
     @Transactional
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String loginid = loginRequestDto.getLoginid();
@@ -70,6 +72,7 @@ public class UserService {
         userRepository.deleteById(user.getId());
 
         // 로그아웃
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, null);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
     }
+
 }
