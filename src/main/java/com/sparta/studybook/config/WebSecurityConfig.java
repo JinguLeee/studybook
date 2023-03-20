@@ -61,6 +61,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    // Cors 이슈
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
 
