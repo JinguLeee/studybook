@@ -3,7 +3,6 @@ package com.sparta.studybook.entity;
 import com.sparta.studybook.dto.request.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -16,7 +15,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String userid;
+    private String loginid;
 
     @Column(nullable = false)
     private String username;
@@ -28,7 +27,7 @@ public class User {
     private String email;
 
     public User(SignupRequestDto signupRequestDto, String password) {
-        this.userid = signupRequestDto.getUserid();
+        this.loginid = signupRequestDto.getLoginid();
         this.password = password;
         this.username = signupRequestDto.getUsername();
         this.email = signupRequestDto.getEmail();

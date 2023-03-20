@@ -4,6 +4,8 @@ import com.sparta.studybook.dto.request.LoginRequestDto;
 import com.sparta.studybook.dto.request.SignupRequestDto;
 import com.sparta.studybook.entity.User;
 import com.sparta.studybook.jwt.JwtUtil;
+import com.sparta.studybook.repository.LikeRepository;
+import com.sparta.studybook.repository.PostRepository;
 import com.sparta.studybook.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,13 +20,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
 
-        Optional<User> found = userRepository.findByUserid(signupRequestDto.getUserid());
+        Optional<User> found = userRepository.findByLoginid(signupRequestDto.getLoginid());
         if (found.isPresent()) { // isPresent : ture는 실행, false는 실행불가
             throw new IllegalArgumentException("중복된 아이디 입니다.");
         }
@@ -39,10 +43,10 @@ public class UserService {
 
     @Transactional
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        String userid = loginRequestDto.getUserid();
+        String loginid = loginRequestDto.getLoginid();
         String password = loginRequestDto.getPassword();
 
-        User user = userRepository.findByUserid(userid).orElseThrow(
+        User user = userRepository.findByLoginid(loginid).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 없습니다.")
         );
 
@@ -50,8 +54,22 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserid()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getLoginid()));
 
 
+    }
+
+    // 회원탈퇴
+    @Transactional
+    public void deleteId(User user, HttpServletResponse response) {
+        // 좋아요 삭제 (orphanRemoval = true 조건으로 연관관계 모두 알아서 삭제)
+        likeRepository.deleteAllByUser(user);
+        // 게시글 삭제 (orphanRemoval = true 조건으로 연관관계 모두 알아서 삭제)
+        postRepository.deleteAllByUser(user);
+        // 아이디 삭제
+        userRepository.deleteById(user.getId());
+
+        // 로그아웃
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, null);
     }
 }
