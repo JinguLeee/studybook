@@ -33,6 +33,11 @@ public class UserService {
             throw new IllegalArgumentException("중복된 아이디 입니다.");
         }
 
+        Optional<User> foundEmail = userRepository.findByEmail(signupRequestDto.getEmail());
+        if (foundEmail.isPresent()) {
+            throw new IllegalArgumentException("중복된 이메일 입니다.");
+        }
+
         // 비밀번호
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
