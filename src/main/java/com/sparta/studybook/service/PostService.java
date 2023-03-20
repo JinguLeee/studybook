@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -54,7 +53,8 @@ public class PostService {
     public PostDetailResponseDto getPost(Long postId, User user) {
         // 게시글 유무
         Post post = checkPost(postId);
-        boolean isLike = isLike(post, user);
+        boolean isLike = false;
+        if (user != null) isLike = isLike(post, user);
         Long countLike = countLike(post);
         return new PostDetailResponseDto(post, isLike, countLike);
     }
@@ -74,7 +74,8 @@ public class PostService {
     public void deletePost(Long postId, User user) {
         checkPost(postId);
         checkMyPost(postId, user);
-        likeRepository.deleteAllByPostId(postId);
+        // orphanRemoval = true 조건으로 연관관계 모두 알아서 삭제)
+        // likeRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
 
@@ -91,6 +92,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
     }
 
+    // 좋아요, 좋아요 취소
     @Transactional
     public LikeResponseDto likepost(Long postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
@@ -108,10 +110,12 @@ public class PostService {
         return new LikeResponseDto(isLike, countLike(post));
     }
 
+    // 좋아요 개수 count
     private Long countLike(Post post){
         return likeRepository.countByPost(post);
     }
 
+    // 좋아요 여부
     public boolean isLike(Post post, User user) {
         Optional<Like> like = likeRepository.findByPostAndUser(post, user);
         return like.isPresent();

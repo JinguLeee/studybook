@@ -39,9 +39,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
-    public void setAuthentication(String userid) {
+    public void setAuthentication(String loginid) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(userid); // 인증 객체를 만든다
+        Authentication authentication = jwtUtil.createAuthentication(loginid); // 인증 객체를 만든다
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);

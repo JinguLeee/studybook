@@ -50,12 +50,12 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String userid) {
+    public String createToken(String loginid) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(userid)
+                        .setSubject(loginid)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
@@ -85,8 +85,8 @@ public class JwtUtil {
     }
 
     // 인증 객체 생성
-    public Authentication createAuthentication(String userid) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userid);
+    public Authentication createAuthentication(String loginid) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginid);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 

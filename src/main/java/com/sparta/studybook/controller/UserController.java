@@ -4,15 +4,14 @@ import com.sparta.studybook.dto.request.LoginRequestDto;
 import com.sparta.studybook.dto.request.SignupRequestDto;
 import com.sparta.studybook.dto.response.ResponseDto;
 import com.sparta.studybook.exception.RestApiException;
+import com.sparta.studybook.security.UserDetailsImpl;
 import com.sparta.studybook.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -45,6 +44,26 @@ public class UserController {
     public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);
         return ResponseEntity.ok().body(new ResponseDto<>("로그인 완료", HttpStatus.OK.value(), null));
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/deleteid")
+    public ResponseEntity<ResponseDto> deleteId(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
+        userService.deleteId(userDetails.getUser(), response);
+        return ResponseEntity.ok().body(new ResponseDto<>("회원탈퇴 완료", HttpStatus.OK.value(), null));
+    }
+
+    // 토큰 에러
+    @GetMapping("/token-error")
+    public ResponseEntity<ResponseDto> tokenError() {
+        RestApiException restApiException = new RestApiException();
+        restApiException.setHttpStatus(HttpStatus.BAD_REQUEST);
+        restApiException.setErrorMessage("로그인이 필요합니다.");
+
+        return new ResponseEntity(
+                restApiException,
+                HttpStatus.BAD_REQUEST
+        );
     }
 
 }
