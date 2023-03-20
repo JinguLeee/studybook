@@ -77,6 +77,7 @@ public class UserService {
         userRepository.deleteById(user.getId());
 
         // 로그아웃
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, null);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, null);
     }
+
 }

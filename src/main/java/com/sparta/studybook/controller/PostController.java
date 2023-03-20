@@ -25,7 +25,6 @@ public class PostController {
     public ResponseEntity<ResponseDto> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.createPost(postRequestDto, userDetails.getUser());
         return ResponseEntity.ok().body(new ResponseDto<>("작성 완료", HttpStatus.CREATED.value(), null));
-
     }
 
     // 전체 게시글 조회

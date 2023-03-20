@@ -14,4 +14,5 @@ public class SecurityExceptionDto {
         this.statusCode = statusCode;
         this.msg = msg;
     }
+
 }
