@@ -11,11 +11,6 @@ public class RestApiExceptionHandler {
 
     @ExceptionHandler(value = { IllegalArgumentException.class })
     public ResponseEntity<ResponseDto> handleApiRequestException(IllegalArgumentException ex) {
-
-
-        return ResponseEntity.badRequest().body(new ResponseDto<>(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), null));
-
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseDto<>(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), null));
 
