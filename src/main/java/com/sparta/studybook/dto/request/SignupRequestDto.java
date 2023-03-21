@@ -11,8 +11,8 @@ import javax.validation.constraints.Pattern;
 public class SignupRequestDto { // 회원가입 정보 가져오기 Dto
 
     @NotBlank(message = "아이디는 필수입니다.")
-    @Pattern(regexp = "^*[a-z0-9]{8,16}$",
-            message = "아이디는 소문자와 숫자 포함된 8자 ~ 16자의 아이디여야 합니다.")
+    @Pattern(regexp = "^*[a-z0-9]{6,16}$",
+            message = "아이디는 소문자와 숫자 포함된 6자 ~ 16자의 아이디여야 합니다.")
     private String loginid;
 
     @NotBlank(message = "사용자이름은 필수입니다.")
