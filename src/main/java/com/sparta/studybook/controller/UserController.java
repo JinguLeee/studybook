@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<ResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>("로그인 cicccccd완료", HttpStatus.OK.value(), null));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>("로그인 완료", HttpStatus.OK.value(), null));
     }
 
     // 회원 탈퇴
