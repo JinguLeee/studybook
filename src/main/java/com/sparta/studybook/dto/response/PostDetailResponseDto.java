@@ -12,6 +12,7 @@ public class PostDetailResponseDto {
     // 클라에서 게시글 어떤 내용을 보여줄지
     private Long id;
     private String title;
+    private String content;
     private String loginid;
     private boolean islike;
     private Long likecount;
@@ -21,6 +22,7 @@ public class PostDetailResponseDto {
     public PostDetailResponseDto(Post post, boolean islike, Long likecount) {
         this.id = post.getId();
         this.title = post.getTitle();
+        this.content = post.getContent();
         this.loginid = post.getUser().getLoginid();
         this.islike = islike;
         this.likecount = likecount;
