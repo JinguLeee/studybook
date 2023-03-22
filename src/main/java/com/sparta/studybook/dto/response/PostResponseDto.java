@@ -12,15 +12,15 @@ public class PostResponseDto {
     private String title;
     private String loginid;
     private boolean islike;
-    private Long likecount;
+    private Long totalCount;
 
     // 게시글 response
-    public PostResponseDto(Post post, boolean islike, Long likecount) {
+    public PostResponseDto(Post post, boolean islike, Long totalCount) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.loginid = post.getUser().getLoginid();
         this.islike = islike;
-        this.likecount = likecount;
+        this.totalCount = totalCount;
     }
 
 }

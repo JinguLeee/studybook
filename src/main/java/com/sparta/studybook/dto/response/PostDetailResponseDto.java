@@ -15,17 +15,17 @@ public class PostDetailResponseDto {
     private String content;
     private String loginid;
     private boolean islike;
-    private Long likecount;
+    private Long totalCount;
     private String createdAt;
 
     // 게시글 response
-    public PostDetailResponseDto(Post post, boolean islike, Long likecount) {
+    public PostDetailResponseDto(Post post, boolean islike, Long totalCount) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.loginid = post.getUser().getLoginid();
         this.islike = islike;
-        this.likecount = likecount;
+        this.totalCount = totalCount;
         this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd a h:mm"));
     }
 
