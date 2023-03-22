@@ -10,7 +10,6 @@ import com.sparta.studybook.entity.User;
 import com.sparta.studybook.repository.LikeRepository;
 import com.sparta.studybook.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +42,7 @@ public class PostService {
         for (Post post : posts) {
             boolean isLike = false;
             if (user != null) isLike = isLike(post, user);
-            postList.add(new PostResponseDto(post, isLike));
+            postList.add(new PostResponseDto(post, isLike, countLike(post)));
         }
         return postList;
     }
