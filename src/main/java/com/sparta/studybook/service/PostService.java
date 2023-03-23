@@ -52,10 +52,16 @@ public class PostService {
     public PostDetailResponseDto getPost(Long postId, User user) {
         // 게시글 유무
         Post post = checkPost(postId);
-        boolean isLike = false;
-        if (user != null) isLike = isLike(post, user);
+        boolean isLike = isLike(post, user);
+        boolean isMine = isMine(post, user);
         Long countLike = countLike(post);
-        return new PostDetailResponseDto(post, isLike, countLike);
+        return new PostDetailResponseDto(post, isLike, isMine, countLike);
+    }
+
+    // 내가 쓴 게시글인지 여부
+    public boolean isMine(Post post, User user) {
+        if (user == null) return false;
+        return post.getUser().getId() == user.getId();
     }
 
     // 게시글 수정
@@ -82,7 +88,7 @@ public class PostService {
     // 판별 함수
     public void checkMyPost(Long postId, User user) {
         postRepository.findByIdAndUser(postId, user)
-                .orElseThrow(() -> new IllegalArgumentException("내가쓴 게시글이 아닙니다."));
+                .orElseThrow(() -> new IllegalArgumentException("내가 쓴 게시글이 아닙니다."));
     }
 
     // 게시글 유무 판별
@@ -116,6 +122,7 @@ public class PostService {
 
     // 좋아요 여부
     public boolean isLike(Post post, User user) {
+        if (user == null) return false;
         Optional<Like> like = likeRepository.findByPostAndUser(post, user);
         return like.isPresent();
     }
