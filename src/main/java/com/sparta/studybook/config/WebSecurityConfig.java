@@ -37,7 +37,7 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         // h2-console 사용 및 resources 접근 허용 설정
         return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console())
+//                .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -70,6 +70,7 @@ public class WebSecurityConfig {
 
         // 사전에 약속된 출처를 명시
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://mini-prject-team3.s3-website.ap-northeast-2.amazonaws.com");
         //config.addAllowedOrigin("http://charleybucket.s3-website.ap-northeast-2.amazonaws.com");
 
         // 특정 헤더를 클라이언트 측에서 사용할 수 있게 지정
