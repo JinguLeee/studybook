@@ -60,6 +60,8 @@ public class PostController {
     // 게시글 좋아요
     @PostMapping("/post/{postId}")
     public ResponseEntity<ResponseDto<LikeResponseDto>> likePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseDto<>("로그인이 필요합니다.", HttpStatus.BAD_REQUEST.value(), null));
         LikeResponseDto likeResponseDto = postService.likepost(postId, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto<>("완료!", HttpStatus.OK.value(), likeResponseDto));
     }
